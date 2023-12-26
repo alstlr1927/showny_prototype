@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_setting_test/battle/battle_test.dart';
 import 'package:flutter_setting_test/camera/camera_test.dart';
+import 'package:flutter_setting_test/main/test_main.dart';
 import 'package:flutter_setting_test/main/test_screen.dart';
 
 void main() async {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const TestPage(),
+      home: const MainScreen(),
     );
   }
 }

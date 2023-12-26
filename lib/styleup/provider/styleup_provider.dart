@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 class StyleUpProvider with ChangeNotifier {
   State state;
 
+  List<List<String>> imageList2 = [
+    ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
+    ['5.jpg'],
+    ['9.jpg', '10.jpg', '11.jpg', '12.jpg'],
+    ['13.jpg', '14.jpg', '15.jpg', '16.jpg'],
+  ];
+
   List<String> imageList = [
     '1.jpg',
     '2.jpg',

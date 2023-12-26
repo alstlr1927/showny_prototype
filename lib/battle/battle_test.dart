@@ -113,18 +113,18 @@ class _BattleItemState extends State<BattleItem> {
                             height: layout.maxHeight,
                             battleInfo: widget.battle,
                           ),
-                          if (!prov.isSelectMode &&
-                              widget.battle.winId.isNotEmpty) ...{
-                            Align(
-                              alignment: widget.battle.winId == player1.name
-                                  ? Alignment.centerRight
-                                  : Alignment.centerLeft,
-                              child: Container(
-                                width: layout.maxWidth / 2,
-                                color: Colors.black.withOpacity(.8),
-                              ),
-                            ),
-                          },
+                          // if (!prov.isSelectMode &&
+                          //     widget.battle.winId.isNotEmpty) ...{
+                          //   Align(
+                          //     alignment: widget.battle.winId == player1.name
+                          //         ? Alignment.centerRight
+                          //         : Alignment.centerLeft,
+                          //     child: Container(
+                          //       width: layout.maxWidth / 2,
+                          //       color: Colors.black.withOpacity(.8),
+                          //     ),
+                          //   ),
+                          // },
                         ],
                       ),
                     ),

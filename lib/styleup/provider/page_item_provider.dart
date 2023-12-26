@@ -7,6 +7,11 @@ import '../styleup.dart';
 
 class PageItemProvider with ChangeNotifier {
   State<PageItem> state;
+  int totalImgCnt;
+
+  int curIdx = 0;
+
+  bool get hasNext => curIdx < totalImgCnt - 1;
 
   Offset startPosition = Offset.zero;
   Offset movePosition = Offset.zero;
@@ -17,7 +22,12 @@ class PageItemProvider with ChangeNotifier {
   bool isSelectMode = false;
   int selected = 0;
   double standardPosition = 0.0;
-  Duration longPressDuration = const Duration(milliseconds: 150);
+  Duration longPressDuration = const Duration(milliseconds: 100);
+
+  void setCurIdx(int value) {
+    curIdx = value;
+    notifyListeners();
+  }
 
   void setSelected({required int value}) {
     if (selected == value) return;
@@ -50,7 +60,7 @@ class PageItemProvider with ChangeNotifier {
   }
 
   void onLongPressStart(LongPressStartDetails details) {
-    standardPosition = details.localPosition.dx;
+    standardPosition = details.localPosition.dy;
     startPosition = Offset(details.localPosition.dx, details.localPosition.dy);
     movePosition = Offset(details.localPosition.dx, details.localPosition.dy);
 
@@ -65,10 +75,10 @@ class PageItemProvider with ChangeNotifier {
   void onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
     setMovePosition(Offset(details.localPosition.dx, details.localPosition.dy));
 
-    if (details.localPosition.dx < standardPosition - 10) {
+    if (details.localPosition.dy < standardPosition - 10) {
       setSelected(value: 1);
       // standardPosition = details.localPosition.dy;
-    } else if (details.localPosition.dx > standardPosition + 10) {
+    } else if (details.localPosition.dy > standardPosition + 10) {
       setSelected(value: 2);
       // standardPosition = details.localPosition.dy;
     }
@@ -139,5 +149,5 @@ class PageItemProvider with ChangeNotifier {
     super.dispose();
   }
 
-  PageItemProvider(this.state);
+  PageItemProvider(this.state, this.totalImgCnt);
 }

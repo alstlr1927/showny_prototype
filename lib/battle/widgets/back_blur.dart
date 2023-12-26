@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 
 class BackBlurWidget extends StatelessWidget {
@@ -39,14 +40,22 @@ class BackBlurWidget extends StatelessWidget {
             ),
           ],
         ),
-        ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-            child: Container(
-              color: Colors.black.withOpacity(0.0),
-            ),
+        Blur(
+          blur: 5,
+          blurColor: Colors.black,
+          child: SizedBox(
+            width: width,
+            height: height,
           ),
         ),
+        // ClipRRect(
+        //   child: BackdropFilter(
+        //     filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
+        //     child: Container(
+        //       color: Colors.white.withOpacity(.1),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_setting_test/battle/battle_test.dart';
+import 'package:flutter_setting_test/battle2/battle_test2.dart';
 import 'package:flutter_setting_test/main/provider/test_provider.dart';
 import 'package:flutter_setting_test/styleup/styleup.dart';
 import 'package:provider/provider.dart';
@@ -29,16 +30,18 @@ class _TestPageState extends State<TestPage>
         return Consumer<TestProvider>(
           builder: (ctx, prov, child) {
             return Scaffold(
+              backgroundColor: Colors.white,
               extendBody: true,
               body: Stack(
                 children: [
                   PageView(
+                    physics: const NeverScrollableScrollPhysics(),
                     controller: prov.pageController,
                     onPageChanged: prov.setTab,
                     allowImplicitScrolling: true,
                     children: const [
                       StyleUp(),
-                      BattlePage(),
+                      BattleTest2(),
                     ],
                   ),
                   SafeArea(
