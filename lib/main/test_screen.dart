@@ -35,7 +35,9 @@ class _TestPageState extends State<TestPage>
               body: Stack(
                 children: [
                   PageView(
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: prov.curPageIdx == 0
+                        ? const BouncingScrollPhysics()
+                        : const NeverScrollableScrollPhysics(),
                     controller: prov.pageController,
                     onPageChanged: prov.setTab,
                     allowImplicitScrolling: true,

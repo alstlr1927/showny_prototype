@@ -5,6 +5,8 @@ class TestProvider with ChangeNotifier {
   late PageController pageController;
   late TabController tabController;
 
+  int curPageIdx = 0;
+
   void setpage(int value) {
     pageController.animateToPage(value,
         duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
@@ -13,6 +15,8 @@ class TestProvider with ChangeNotifier {
   void setTab(int value) {
     tabController.animateTo(value,
         duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+    curPageIdx = value;
+    notifyListeners();
   }
 
   @override

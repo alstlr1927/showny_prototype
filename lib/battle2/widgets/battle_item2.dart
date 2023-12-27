@@ -18,32 +18,39 @@ class BattleItem2 extends StatefulWidget {
 
 class _BattleItem2State extends State<BattleItem2>
     with TickerProviderStateMixin {
+  double defaultImgWidth = 160;
+  double imgRatio = 9 / 16;
+  Duration aniDuration = const Duration(milliseconds: 200);
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    defaultImgWidth = size.width * .41;
     return ChangeNotifierProvider<BattleItem2Provider>(
         create: (_) => BattleItem2Provider(this),
         builder: (context, _) {
           return Consumer<BattleItem2Provider>(builder: (ctx, prov, child) {
-            return CustomLongPress(
-              duration: prov.longPressDuration,
-              onLongPress: prov.onLongPress,
-              onLongPressCancel: prov.onLongPressCancel,
-              onLongPressUp: prov.onLongPressUp,
-              onLongPressEnd: prov.onLongPressEnd,
-              onLongPressMoveUpdate: prov.onLongPressMoveUpdate,
-              onLongPressStart: prov.onLongPressStart,
+            return GestureDetector(
+              onPanUpdate: prov.onPanUpdate,
+              // duration: prov.longPressDuration,
+              // onLongPress: prov.onLongPress,
+              // onLongPressCancel: prov.onLongPressCancel,
+              // onLongPressUp: prov.onLongPressUp,
+              // onLongPressEnd: prov.onLongPressEnd,
+              // onLongPressMoveUpdate: prov.onLongPressMoveUpdate,
+              // onLongPressStart: prov.onLongPressStart,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   BackBlurWidget(
-                    width: MediaQuery.of(ctx).size.width,
+                    width: size.width,
                     height: double.infinity,
                     image1: widget.battle.player1.image,
                     image2: widget.battle.player2.image,
                   ),
                   AnimatedScale(
                     scale: prov.isSelectMode ? 1.2 : 1,
-                    duration: const Duration(milliseconds: 200),
+                    duration: aniDuration,
                     child: SlideTransition(
                       position: prov.positionA,
                       child: ScaleTransition(
@@ -51,9 +58,9 @@ class _BattleItem2State extends State<BattleItem2>
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: SizedBox(
-                            width: 140,
+                            width: defaultImgWidth,
                             child: AspectRatio(
-                              aspectRatio: 9 / 16,
+                              aspectRatio: imgRatio,
                               child: Image.asset(
                                 'assets/images/${widget.battle.player1.image}',
                                 fit: BoxFit.cover,
@@ -66,7 +73,7 @@ class _BattleItem2State extends State<BattleItem2>
                   ),
                   AnimatedScale(
                     scale: prov.isSelectMode ? 1.2 : 1,
-                    duration: const Duration(milliseconds: 200),
+                    duration: aniDuration,
                     child: SlideTransition(
                       position: prov.positionB,
                       child: ScaleTransition(
@@ -74,9 +81,9 @@ class _BattleItem2State extends State<BattleItem2>
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: SizedBox(
-                            width: 140,
+                            width: defaultImgWidth,
                             child: AspectRatio(
-                              aspectRatio: 9 / 16,
+                              aspectRatio: imgRatio,
                               child: Image.asset(
                                 'assets/images/${widget.battle.player2.image}',
                                 fit: BoxFit.cover,
@@ -90,7 +97,7 @@ class _BattleItem2State extends State<BattleItem2>
                   if (prov.focused == 0) ...{
                     AnimatedScale(
                       scale: prov.isSelectMode ? 1.2 : 1,
-                      duration: const Duration(milliseconds: 200),
+                      duration: aniDuration,
                       child: SlideTransition(
                         position: prov.positionA,
                         child: ScaleTransition(
@@ -98,9 +105,9 @@ class _BattleItem2State extends State<BattleItem2>
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: SizedBox(
-                              width: 140,
+                              width: defaultImgWidth,
                               child: AspectRatio(
-                                aspectRatio: 9 / 16,
+                                aspectRatio: imgRatio,
                                 child: Image.asset(
                                   'assets/images/${widget.battle.player1.image}',
                                   fit: BoxFit.cover,
@@ -111,7 +118,7 @@ class _BattleItem2State extends State<BattleItem2>
                         ),
                       ),
                     )
-                  }
+                  },
                 ],
               ),
             );

@@ -11,7 +11,6 @@ class BattleItem2Provider with ChangeNotifier {
   bool isSelectMode = false;
 
   int focused = -1;
-  int prevFocused = -1;
 
   // animation
   late AnimationController _animation;
@@ -38,7 +37,10 @@ class BattleItem2Provider with ChangeNotifier {
   void onLongPressUp() async {
     isSelectMode = false;
     // focused = -1;
-    // _animation.reverse();
+    if (focused == -1) {
+      _animation.reverse();
+    }
+
     // focused = -1;
     // print('focused : ${focused}');
     // print('prev focused : ${prevFocused}');
@@ -63,14 +65,27 @@ class BattleItem2Provider with ChangeNotifier {
       pressPosition = details.localPosition.dx;
       await startRightAnimation();
       focused = 1;
-      prevFocused = 1;
     } else if (details.localPosition.dx > pressPosition + 4) {
       pressPosition = details.localPosition.dx;
 
       await startLeftAnimation();
       focused = 0;
-      prevFocused = 0;
     }
+    notifyListeners();
+  }
+
+  Future onPanUpdate(DragUpdateDetails details) async {
+    if (!_animation.isAnimating) {
+      if (details.delta.dx < -2) {
+        // pressPosition = details.localPosition.dx;
+        await startRightAnimation();
+      } else if (details.delta.dx > 2) {
+        // pressPosition = details.localPosition.dx;
+
+        await startLeftAnimation();
+      }
+    }
+
     notifyListeners();
   }
 
@@ -82,9 +97,11 @@ class BattleItem2Provider with ChangeNotifier {
   Future startLeftAnimation() async {
     if (!_animation.isAnimating) {
       if (focused == 0) return;
-
-      await _animation.reverse();
+      print('left');
+      _animation.reset();
       setupLeftAnimation();
+      focused = 0;
+      notifyListeners();
       await _animation.forward();
       HapticFeedback.lightImpact();
     }
@@ -93,9 +110,11 @@ class BattleItem2Provider with ChangeNotifier {
   Future startRightAnimation() async {
     if (!_animation.isAnimating) {
       if (focused == 1) return;
-
-      await _animation.reverse();
+      print('right');
+      _animation.reset();
       setupRightAnimation();
+      focused = 1;
+      notifyListeners();
       await _animation.forward();
       HapticFeedback.lightImpact();
     }
@@ -109,14 +128,14 @@ class BattleItem2Provider with ChangeNotifier {
 
   BattleItem2Provider(this.state) {
     _animation = AnimationController(
-      duration: const Duration(milliseconds: 150),
+      duration: const Duration(milliseconds: 200),
       vsync: state as TickerProvider,
     );
     setupLeftAnimation();
   }
 
   void setupLeftAnimation() {
-    scaleAnimationA = Tween<double>(begin: 1.0, end: 1.7).animate(_animation);
+    scaleAnimationA = Tween<double>(begin: 1.0, end: 1.5).animate(_animation);
     scaleAnimationB = Tween<double>(begin: 1.0, end: 0.8).animate(_animation);
     opacityAnimationA = Tween<double>(begin: 1.0, end: 0.3).animate(_animation);
     opacityAnimationB = Tween<double>(begin: 1.0, end: 0.3).animate(_animation);
@@ -130,7 +149,7 @@ class BattleItem2Provider with ChangeNotifier {
 
   void setupRightAnimation() {
     scaleAnimationA = Tween<double>(begin: 1.0, end: .8).animate(_animation);
-    scaleAnimationB = Tween<double>(begin: 1.0, end: 1.7).animate(_animation);
+    scaleAnimationB = Tween<double>(begin: 1.0, end: 1.5).animate(_animation);
     opacityAnimationA = Tween<double>(begin: 1.0, end: 0.3).animate(_animation);
     opacityAnimationB = Tween<double>(begin: 1.0, end: 0.3).animate(_animation);
     positionA =
