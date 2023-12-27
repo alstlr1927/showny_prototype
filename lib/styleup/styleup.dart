@@ -126,9 +126,9 @@ class _PageItemState extends State<PageItem> {
                               ),
                             ),
                             if (widget.imagePath.length > 1) ...{
-                              // Container(
-                              //   height: 250,
-                              // ),
+                              Container(
+                                height: 200,
+                              ),
                             },
                           ],
                         ),
