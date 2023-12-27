@@ -56,6 +56,7 @@ class PageItemProvider with ChangeNotifier {
   void onLongPress() {
     isSelectMode = true;
     HapticFeedback.lightImpact();
+    print('????');
     notifyListeners();
   }
 

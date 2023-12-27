@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_setting_test/comm/scroll_physics/custom_page_view_scroll_physics.dart';
 
 class TestProvider with ChangeNotifier {
   State state;
@@ -6,6 +7,21 @@ class TestProvider with ChangeNotifier {
   late TabController tabController;
 
   int curPageIdx = 0;
+
+  bool isBattleSelected = false;
+
+  ScrollPhysics getPhysics() {
+    if (curPageIdx == 0 || isBattleSelected) {
+      return const CustomPageViewScrollPhysics();
+    }
+    return const NeverScrollableScrollPhysics();
+  }
+
+  void setIsBattleSelected(bool value) {
+    isBattleSelected = value;
+    print('setbattleselected : $value');
+    notifyListeners();
+  }
 
   void setpage(int value) {
     pageController.animateToPage(value,

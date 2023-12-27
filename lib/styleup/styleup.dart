@@ -88,12 +88,14 @@ class _PageItemState extends State<PageItem> {
               Provider.of<PageItemProvider>(context, listen: false);
           return SafeArea(
             bottom: false,
+            top: false,
             // top: widget.imagePath.length == 1 ? false : true,
             child: Container(
               margin:
                   EdgeInsets.only(top: widget.imagePath.length == 1 ? 0 : 30),
               child: LayoutBuilder(builder: (context, layout) {
                 return Consumer<PageItemProvider>(builder: (ctx, prov, child) {
+                  print('re build');
                   return Stack(
                     children: <Widget>[
                       CustomLongPress(
@@ -128,6 +130,9 @@ class _PageItemState extends State<PageItem> {
                             if (widget.imagePath.length > 1) ...{
                               Container(
                                 height: 200,
+                                color: prov.isSelectMode
+                                    ? Colors.amber
+                                    : Colors.white,
                               ),
                             },
                           ],

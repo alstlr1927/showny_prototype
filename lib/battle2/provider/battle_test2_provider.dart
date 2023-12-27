@@ -19,6 +19,12 @@ class BattleTest2Provider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setBattleData({required int idx, required String id}) {
+    print('set battle data');
+    battleDatas[idx].winId = id;
+    notifyListeners();
+  }
+
   @override
   void notifyListeners() {
     if (state.mounted) {

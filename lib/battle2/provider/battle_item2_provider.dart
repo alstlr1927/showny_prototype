@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_setting_test/battle2/provider/battle_test2_provider.dart';
 import 'package:flutter_setting_test/battle2/widgets/battle_item2.dart';
+import 'package:flutter_setting_test/main/provider/test_provider.dart';
+import 'package:flutter_setting_test/model/battle.dart';
+import 'package:provider/provider.dart';
 
 class BattleItem2Provider with ChangeNotifier {
   State<BattleItem2> state;
@@ -12,76 +16,44 @@ class BattleItem2Provider with ChangeNotifier {
 
   int focused = -1;
 
+  late BattleTest2Provider battleProvider;
+  late TestProvider testProvider;
+
   // animation
   late AnimationController _animation;
   late Animation<double> scaleAnimationA;
   late Animation<double> scaleAnimationB;
-  late Animation<double> opacityAnimationA;
-  late Animation<double> opacityAnimationB;
+  // late Animation<double> opacityAnimationA;
+  // late Animation<double> opacityAnimationB;
   late Animation<Offset> positionA;
   late Animation<Offset> positionB;
 
-  void onLongPress() {
-    isSelectMode = true;
-    focused = -1;
-    _animation.reverse();
-    HapticFeedback.lightImpact();
-    notifyListeners();
-  }
-
-  void onLongPressCancel() {
-    isSelectMode = false;
-    notifyListeners();
-  }
-
-  void onLongPressUp() async {
-    isSelectMode = false;
-    // focused = -1;
-    if (focused == -1) {
-      _animation.reverse();
+  void setFocused(int value) {
+    if (value != -1) {
+      if (value == 0) {
+        setBattleData(state.widget.battle.player1.name);
+      } else if (value == 1) {
+        setBattleData(state.widget.battle.player2.name);
+      }
+      testProvider.setIsBattleSelected(true);
+    } else {
+      testProvider.setIsBattleSelected(false);
     }
 
-    // focused = -1;
-    // print('focused : ${focused}');
-    // print('prev focused : ${prevFocused}');
-    // if (focused == -1 && prevFocused != -1) {
-    //   if (prevFocused == 0) {
-    //     await startLeftAnimation();
-    //   } else {
-    //     await startRightAnimation();
-    //   }
-    //   focused = prevFocused;
-    // }
-    // notifyListeners();
-  }
-
-  void onLongPressStart(LongPressStartDetails details) {
-    pressPosition = details.localPosition.dx;
+    focused = value;
     notifyListeners();
   }
 
-  Future onLongPressMoveUpdate(LongPressMoveUpdateDetails details) async {
-    if (details.localPosition.dx < pressPosition - 4) {
-      pressPosition = details.localPosition.dx;
-      await startRightAnimation();
-      focused = 1;
-    } else if (details.localPosition.dx > pressPosition + 4) {
-      pressPosition = details.localPosition.dx;
-
-      await startLeftAnimation();
-      focused = 0;
-    }
-    notifyListeners();
+  void setBattleData(String id) {
+    battleProvider.setBattleData(idx: state.widget.index, id: id);
   }
 
   Future onPanUpdate(DragUpdateDetails details) async {
+    if (state.widget.battle.winId.isNotEmpty) return;
     if (!_animation.isAnimating) {
       if (details.delta.dx < -2) {
-        // pressPosition = details.localPosition.dx;
         await startRightAnimation();
       } else if (details.delta.dx > 2) {
-        // pressPosition = details.localPosition.dx;
-
         await startLeftAnimation();
       }
     }
@@ -89,19 +61,12 @@ class BattleItem2Provider with ChangeNotifier {
     notifyListeners();
   }
 
-  void onLongPressEnd(LongPressEndDetails details) {
-    pressPosition = 0.0;
-    notifyListeners();
-  }
-
   Future startLeftAnimation() async {
     if (!_animation.isAnimating) {
       if (focused == 0) return;
-      print('left');
       _animation.reset();
       setupLeftAnimation();
-      focused = 0;
-      notifyListeners();
+      setFocused(0);
       await _animation.forward();
       HapticFeedback.lightImpact();
     }
@@ -110,11 +75,9 @@ class BattleItem2Provider with ChangeNotifier {
   Future startRightAnimation() async {
     if (!_animation.isAnimating) {
       if (focused == 1) return;
-      print('right');
       _animation.reset();
       setupRightAnimation();
-      focused = 1;
-      notifyListeners();
+      setFocused(1);
       await _animation.forward();
       HapticFeedback.lightImpact();
     }
@@ -126,37 +89,82 @@ class BattleItem2Provider with ChangeNotifier {
     super.dispose();
   }
 
-  BattleItem2Provider(this.state) {
+  void _initSetting() {
+    BattleModel battle = state.widget.battle;
     _animation = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: state as TickerProvider,
     );
-    setupLeftAnimation();
+    if (battle.player1.name == battle.winId) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        testProvider.setIsBattleSelected(true);
+      });
+      selectedLeft();
+    } else if (battle.player2.name == battle.winId) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        testProvider.setIsBattleSelected(true);
+      });
+      selectedRight();
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        testProvider.setIsBattleSelected(false);
+      });
+      setupLeftAnimation();
+    }
+  }
+
+  BattleItem2Provider(this.state) {
+    testProvider = Provider.of<TestProvider>(state.context);
+    battleProvider = Provider.of<BattleTest2Provider>(state.context);
+
+    _initSetting();
+  }
+
+  void selectedLeft() {
+    focused = 0;
+    notifyListeners();
+    scaleAnimationA = Tween<double>(begin: 1.5, end: 1.5).animate(_animation);
+    scaleAnimationB = Tween<double>(begin: 1.0, end: 1.0).animate(_animation);
+    positionA =
+        Tween<Offset>(begin: const Offset(0, 0), end: const Offset(0, 0))
+            .animate(_animation);
+    positionB =
+        Tween<Offset>(begin: const Offset(.6, 0), end: const Offset(.6, 0))
+            .animate(_animation);
+  }
+
+  void selectedRight() {
+    focused = 1;
+    notifyListeners();
+    scaleAnimationA = Tween<double>(begin: 1.0, end: 1.0).animate(_animation);
+    scaleAnimationB = Tween<double>(begin: 1.5, end: 1.5).animate(_animation);
+    positionA =
+        Tween<Offset>(begin: const Offset(-.6, 0), end: const Offset(-.6, .0))
+            .animate(_animation);
+    positionB =
+        Tween<Offset>(begin: const Offset(0, 0), end: const Offset(0, 0))
+            .animate(_animation);
   }
 
   void setupLeftAnimation() {
     scaleAnimationA = Tween<double>(begin: 1.0, end: 1.5).animate(_animation);
-    scaleAnimationB = Tween<double>(begin: 1.0, end: 0.8).animate(_animation);
-    opacityAnimationA = Tween<double>(begin: 1.0, end: 0.3).animate(_animation);
-    opacityAnimationB = Tween<double>(begin: 1.0, end: 0.3).animate(_animation);
+    scaleAnimationB = Tween<double>(begin: 1.0, end: 1.0).animate(_animation);
     positionA =
-        Tween<Offset>(begin: const Offset(-.65, 0), end: const Offset(0, 0))
+        Tween<Offset>(begin: const Offset(-.6, 0), end: const Offset(0, 0))
             .animate(_animation);
     positionB =
-        Tween<Offset>(begin: const Offset(.65, 0), end: const Offset(.8, .35))
+        Tween<Offset>(begin: const Offset(.6, 0), end: const Offset(.6, .0))
             .animate(_animation);
   }
 
   void setupRightAnimation() {
-    scaleAnimationA = Tween<double>(begin: 1.0, end: .8).animate(_animation);
+    scaleAnimationA = Tween<double>(begin: 1.0, end: 1.0).animate(_animation);
     scaleAnimationB = Tween<double>(begin: 1.0, end: 1.5).animate(_animation);
-    opacityAnimationA = Tween<double>(begin: 1.0, end: 0.3).animate(_animation);
-    opacityAnimationB = Tween<double>(begin: 1.0, end: 0.3).animate(_animation);
     positionA =
-        Tween<Offset>(begin: const Offset(-.65, 0), end: const Offset(-.8, .35))
+        Tween<Offset>(begin: const Offset(-.6, 0), end: const Offset(-.6, .0))
             .animate(_animation);
     positionB =
-        Tween<Offset>(begin: const Offset(.65, 0), end: const Offset(0, 0))
+        Tween<Offset>(begin: const Offset(.6, 0), end: const Offset(0, 0))
             .animate(_animation);
   }
 }
