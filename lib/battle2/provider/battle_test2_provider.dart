@@ -20,8 +20,12 @@ class BattleTest2Provider with ChangeNotifier {
   }
 
   void setBattleData({required int idx, required String id}) {
-    print('set battle data');
-    battleDatas[idx].winId = id;
+    BattleModel temp = battleDatas[idx];
+    battleDatas[idx] = temp.copyWith(winId: id);
+    List<BattleModel> tempList = [...battleDatas];
+    battleDatas.clear();
+    notifyListeners();
+    battleDatas = [...tempList];
     notifyListeners();
   }
 
@@ -34,6 +38,7 @@ class BattleTest2Provider with ChangeNotifier {
 
   @override
   void dispose() {
+    pageController.dispose();
     super.dispose();
   }
 

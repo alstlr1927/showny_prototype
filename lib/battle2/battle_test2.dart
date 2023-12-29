@@ -23,12 +23,20 @@ class _BattleTest2State extends State<BattleTest2> {
   }
 
   @override
+  void dispose() {
+    provider.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return ChangeNotifierProvider<BattleTest2Provider>.value(
       value: provider,
       builder: (context, child) {
         return Consumer<BattleTest2Provider>(builder: (ctx, prov, child) {
+          print(
+              'test2 rebuild ${prov.battleDatas.isNotEmpty ? prov.battleDatas.first.toJson() : ''}');
           return PageView(
             physics: const CustomPageViewScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -39,6 +47,7 @@ class _BattleTest2State extends State<BattleTest2> {
                 battle: prov.battleDatas[index],
                 index: index,
                 size: size,
+                setBattleData: prov.setBattleData,
               ),
             ),
           );

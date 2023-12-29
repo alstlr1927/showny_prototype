@@ -38,34 +38,39 @@ class _TestPageState extends State<TestPage>
                     physics: prov.getPhysics(),
                     controller: prov.pageController,
                     onPageChanged: prov.setTab,
-                    allowImplicitScrolling: true,
                     children: const [
                       StyleUp(),
                       BattleTest2(),
                     ],
                   ),
                   SafeArea(
-                    child: TabBar(
-                      controller: prov.tabController,
-                      dividerColor: Colors.transparent,
-                      indicatorColor: Colors.white,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      labelColor: Colors.white,
-                      unselectedLabelColor: Colors.white,
-                      labelPadding: const EdgeInsets.only(bottom: 3),
-                      labelStyle: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: TabBar(
+                        controller: prov.tabController,
+                        dividerColor: Colors.transparent,
+                        indicatorColor:
+                            prov.curPageIdx == 0 ? Colors.white : Colors.white,
+                        indicatorSize: TabBarIndicatorSize.label,
+                        labelColor:
+                            prov.curPageIdx == 0 ? Colors.white : Colors.white,
+                        unselectedLabelColor:
+                            prov.curPageIdx == 0 ? Colors.white : Colors.white,
+                        labelPadding: const EdgeInsets.only(bottom: 3),
+                        labelStyle: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        unselectedLabelStyle: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        tabs: const [
+                          Text('스타일업'),
+                          Text('배틀'),
+                        ],
+                        onTap: prov.setpage,
                       ),
-                      unselectedLabelStyle: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      tabs: const [
-                        Text('스타일업'),
-                        Text('배틀'),
-                      ],
-                      onTap: prov.setpage,
                     ),
                   ),
                 ],

@@ -128,6 +128,15 @@ class _BattleUserState extends State<BattleUser> {
                                     padding: const EdgeInsets.only(left: 14),
                                     decoration: BoxDecoration(
                                       color: const Color(0xff5900FF),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [
+                                          const Color(0xff5900FF)
+                                              .withOpacity(.3),
+                                          const Color(0xff5900FF)
+                                        ],
+                                      ),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Text(
@@ -157,7 +166,7 @@ class _BattleUserState extends State<BattleUser> {
                   width: widget.defaultImgWidth,
                   height: widget.defaultImgWidth * (16 / 9),
                   color: isFinished && !isWin
-                      ? Colors.white.withOpacity(.6)
+                      ? Colors.black.withOpacity(.4)
                       : Colors.transparent,
                 ),
               ),

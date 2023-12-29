@@ -40,9 +40,10 @@ dependencies:
   # camera: ^0.10.5+7
   camerawesome: ^2.0.0+1
   path_provider: ^2.1.1
-  video_player: ^2.8.1
+  video_player: ^2.7.2
   carousel_slider: ^4.2.1
   blur: ^3.1.0
+  visibility_detector: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:

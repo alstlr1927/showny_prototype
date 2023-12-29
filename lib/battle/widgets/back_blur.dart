@@ -60,3 +60,47 @@ class BackBlurWidget extends StatelessWidget {
     );
   }
 }
+
+class BackBlurWidget2 extends StatelessWidget {
+  final double width;
+  final double height;
+  final String image1;
+  const BackBlurWidget2({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.image1,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: Image.asset(
+            'assets/images/$image1',
+            fit: BoxFit.cover,
+          ),
+        ),
+        const Blur(
+          blur: 5,
+          blurColor: Colors.black,
+          child: SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+          ),
+        ),
+        // ClipRRect(
+        //   child: BackdropFilter(
+        //     filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
+        //     child: Container(
+        //       color: Colors.white.withOpacity(.1),
+        //     ),
+        //   ),
+        // ),
+      ],
+    );
+  }
+}

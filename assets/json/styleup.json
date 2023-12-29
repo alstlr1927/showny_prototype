@@ -1,0 +1,37 @@
+[
+    {
+        "name": "user_01",
+        "type": "image",
+        "image_list": ["1.jpg"],
+        "video": "",
+        "result": ""
+      },
+      {
+        "name": "user_02",
+        "type": "video",
+        "image_list": [],
+        "video": "assets/images/video_1.MP4",
+        "result": ""
+      },
+      {
+        "name": "user_03",
+        "type": "image",
+        "image_list": ["10.jpg", "12.jpg"],
+        "video": "",
+        "result": ""
+      },
+      {
+        "name": "user_04",
+        "type": "image",
+        "image_list": ["13.jpg", "14.jpg", "15.jpg", "16.jpg"],
+        "video": "",
+        "result": ""
+      },
+      {
+        "name": "user_05",
+        "type": "video",
+        "image_list": [],
+        "video": "assets/images/video_2.MOV",
+        "result": ""
+      }
+    ]

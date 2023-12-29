@@ -6,15 +6,19 @@ import 'package:flutter_setting_test/battle2/widgets/battle_user.dart';
 import 'package:flutter_setting_test/model/battle.dart';
 import 'package:provider/provider.dart';
 
+typedef _SetBattleData = void Function({required int idx, required String id});
+
 class BattleItem2 extends StatefulWidget {
   final BattleModel battle;
   final int index;
   final Size size;
+  final _SetBattleData setBattleData;
   const BattleItem2({
     super.key,
     required this.battle,
     required this.index,
     required this.size,
+    required this.setBattleData,
   });
 
   @override

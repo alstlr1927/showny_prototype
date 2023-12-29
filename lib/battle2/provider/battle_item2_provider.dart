@@ -46,6 +46,8 @@ class BattleItem2Provider with ChangeNotifier {
 
   void setBattleData(String id) {
     battleProvider.setBattleData(idx: state.widget.index, id: id);
+    // state.widget.battle.copyWith(winId: id);
+    // notifyListeners();
   }
 
   Future onPanUpdate(DragUpdateDetails details) async {

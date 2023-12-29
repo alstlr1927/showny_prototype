@@ -24,6 +24,13 @@ class BattleModel {
       'win_id': winId,
     };
   }
+
+  BattleModel copyWith({Player? player1, Player? player2, String? winId}) =>
+      BattleModel(
+        player1: player1 ?? this.player1,
+        player2: player2 ?? this.player2,
+        winId: winId ?? this.winId,
+      );
 }
 
 class Player {
